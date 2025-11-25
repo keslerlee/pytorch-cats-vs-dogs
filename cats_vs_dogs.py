@@ -1,6 +1,7 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
+import numpy as np
 
 if torch.cuda.is_available():
     device = torch.device("cuda")
@@ -14,3 +15,24 @@ transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5
 
 train_dataset_full = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
 test_dataset_full = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+
+def filter_cats_dogs(dataset):
+    data = []
+    labels = []
+    if hasattr(dataset, "targets"):
+        labels_list = dataset.targets
+    elif dataset.train:
+        labels_list = dataset.train_labels
+    else:
+        labels_list = dataset.test_labels
+    
+    for i in range(len(dataset)):
+        label = labels_list[i]
+        if label == 3:
+            data.append(dataset.data[i])
+            labels.append(0)
+        elif label == 5:
+            data.append(dataset.data[i])
+            labels.append(1)
+
+    return np.array(data), np.array(labels)
