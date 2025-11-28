@@ -36,3 +36,10 @@ def filter_cats_dogs(dataset):
             labels.append(1)
 
     return np.array(data), np.array(labels)
+
+print("Filtering dataset for cats and dogs")
+train_data, train_labels = filter_cats_dogs(train_dataset_full)
+test_data, test_labels = filter_cats_dogs(test_dataset_full)
+
+print(f"Train data size: {len(train_data)}")
+print(f"Test data size: {len(test_data)}")
